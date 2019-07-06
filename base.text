@@ -1,0 +1,49 @@
+import unittest
+import requests
+from lib.utils import *
+from setting import *
+import ddt
+
+@ddt.ddt
+class %(class_name)s(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.responses = {}
+
+    @ddt.file_data(os.path.join(DATA_PATH,'%(file_name)s'))
+    def test_%(method_name)s( self,**params):
+        self._testClassName = params.get('case')  # 测试类
+        self._testMethodName = params.get("uri")  # 请求方法
+        self._testMethodDoc = params.get('detail')  # 用例说明
+        case_id = params.get('id')
+        url = API_URL + params.get('uri')
+        method = params.get('method')
+        data = params.get('data')
+        check = params.get('check')
+        # 构建参数
+        data = deal_with_rely(data, self.responses)
+        # 生成签名后重新组装data
+        data = set_sign(data)
+        # 获取头部数据
+        header = API_HEADER
+
+        # 根据方法构造请求
+        if method.lower() == 'post':
+            res = requests.post(url, json = data, headers = header)
+        else:
+            res = requests.post(url, params = data, headers = header)
+        resp = res.json()
+        self.responses[case_id] = resp
+
+        print("请求数据：", params.get("data"), "<br/>")
+        print("HOST：", url, "<br/>")
+        print("Header", header)
+        print("status：", resp['status'])
+        print("Message：", resp['message'])
+        print("响应结果：", resp)
+        print("断言内容：", check)
+
+        # 断言
+        for c in check:
+            self.assertTrue(c, resp)
