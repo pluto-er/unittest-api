@@ -4,14 +4,14 @@ from setting import *
 import ddt
 
 @ddt.ddt
-class %(class_name)s(unittest.TestCase):
+class Draw(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         cls.responses = {}
 
-    @ddt.file_data(os.path.join(DATA_PATH,'%(file_name)s'))
-    def test_%(method_name)s( self,**params):
+    @ddt.file_data(os.path.join(DATA_PATH,'draw.yaml'))
+    def test_draw( self,**params):
         self._testClassName = params.get('case')  # 测试类
         self._testMethodName = params.get("uri")  # 请求方法
         self._testMethodDoc = params.get('detail')  # 用例说明

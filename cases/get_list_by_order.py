@@ -1,42 +1,41 @@
 import unittest
-import requests
 from lib.utils import *
 from setting import *
 import ddt
 
 @ddt.ddt
-class City_list(unittest.TestCase):
+class Get_list_by_order(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         cls.responses = {}
 
-    @ddt.file_data(os.path.join(DATA_PATH,'city_list.yaml'))
-    def test_city_list( self,**params):
+    @ddt.file_data(os.path.join(DATA_PATH,'get_list_by_order.yaml'))
+    def test_get_list_by_order( self,**params):
         self._testClassName = params.get('case')  # 测试类
         self._testMethodName = params.get("uri")  # 请求方法
         self._testMethodDoc = params.get('detail')  # 用例说明
-        case_id = params.get('id')
         url = API_URL + params.get('uri')
         method = params.get('method')
         data = params.get('data')
         check = params.get('check')
-        # 构建参数
-        data = deal_with_rely(data, self.responses)
-        # 生成签名后重新组装data
-        data = set_sign(data)
-        # 获取头部数据
-        header = API_HEADER
+        header = API_HEADER  # 获取头部数据
 
+        # 依赖数据获取
+        rely_data = params.get("rely")
+        if rely_data:
+            data = rely_func(rely_data)
+            if not data:
+                return
         # 根据方法构造请求
         if method.lower() == 'post':
             res = requests.post(url, json = data, headers = header)
         else:
             res = requests.post(url, params = data, headers = header)
         resp = res.json()
-        self.responses[case_id] = resp
 
-        print("请求数据：", params.get("data"), "<br/>")
+        # 打印数据
+        print("请求数据：", data, "<br/>")
         print("HOST：", url, "<br/>")
         print("Header", header)
         print("status：", resp['status'])
@@ -46,4 +45,4 @@ class City_list(unittest.TestCase):
 
         # 断言
         for c in check:
-            self.assertTrue(c, resp)
+            self.assertIn(c, set_res_data(res.text))

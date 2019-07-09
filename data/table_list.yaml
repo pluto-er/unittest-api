@@ -1,0 +1,13 @@
+- id: table_list_1
+  case: 按订单
+  detail: 按订单/按桌位
+  uri: /product/table/list
+  method: post
+  data:
+    type: 4
+    page: 1
+    size: 30
+    childType: 13
+  check:
+    - status=200
+    - code=0

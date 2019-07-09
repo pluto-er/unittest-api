@@ -1,0 +1,21 @@
+- id: get_list_by_order_1
+  case: 根据订单获取菜品信息
+  detail: 根据订单获取菜品信息
+  uri: /product/order-goods/get-list-by-order
+  method: post
+  data:
+    orderno: 1562557345902896239
+  check:
+    - status=200
+    - code=0
+  rely:  #依赖数据
+    - uri: /product/table/list
+      method: post
+      list_key:
+        - data #取依赖的键
+      key: #依赖的关键词
+        - orderno: orderno
+      data:
+        page: 1
+        size: 30
+

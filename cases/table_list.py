@@ -4,14 +4,14 @@ from setting import *
 import ddt
 
 @ddt.ddt
-class %(class_name)s(unittest.TestCase):
+class Table_list(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         cls.responses = {}
 
-    @ddt.file_data(os.path.join(DATA_PATH,'%(file_name)s'))
-    def test_%(method_name)s( self,**params):
+    @ddt.file_data(os.path.join(DATA_PATH,'table_list.yaml'))
+    def test_table_list( self,**params):
         self._testClassName = params.get('case')  # 测试类
         self._testMethodName = params.get("uri")  # 请求方法
         self._testMethodDoc = params.get('detail')  # 用例说明

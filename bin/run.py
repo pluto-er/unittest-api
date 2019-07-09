@@ -15,12 +15,11 @@ discover = unittest.defaultTestLoader.discover(
 		pattern = '*.py'
 		)
 
-month = time.strftime('%Y%m')
 now = time.strftime('%Y%m%d%H%M%S')
-html_name = now
 runner = BR(discover)
 runner.report(
 		description = '划菜端接口自动化测试报告',
-		filename = now,
+		# filename = now,
+		filename = '20190708143733.html',
 		log_path = REPORT_PATH,
 		)
